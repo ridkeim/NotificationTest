@@ -31,20 +31,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
 
     private fun snoozeNotification(context: Context) {
         val alarmManager = ContextCompat.getSystemService(context, AlarmManager::class.java) as AlarmManager
-        val notificationIntent = Intent(context, AlarmReceiver::class.java)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        AlarmManagerCompat.setExactAndAllowWhileIdle(
-                alarmManager,
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime()+5* DateUtils.SECOND_IN_MILLIS,
-                pendingIntent
-        )
+        alarmManager.setupAlarm(context,5,0)
     }
 
     private fun dismissNotification(context: Context){

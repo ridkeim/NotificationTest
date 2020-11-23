@@ -24,30 +24,17 @@ class MainActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener {
             val notificationManager = ContextCompat.getSystemService(
-                application,
+                this,
                 NotificationManager::class.java
-            )
-            notificationManager?.sendNotification("immediate",application)
+            ) as NotificationManager
+            notificationManager.sendNotification("immediate",this)
         }
         sendDelayedButton.setOnClickListener {
             val alarmManager = ContextCompat.getSystemService(
                 applicationContext,
                 AlarmManager::class.java
             ) as AlarmManager
-
-            val notificationIntent = Intent(application, AlarmReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(
-                application,
-                0,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            AlarmManagerCompat.setExactAndAllowWhileIdle(
-                alarmManager,
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime()+10*DateUtils.SECOND_IN_MILLIS,
-                pendingIntent
-            )
+            alarmManager.setupAlarm(applicationContext, 10,0)
         }
     }
 
@@ -58,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.channel_name),
                 NotificationManager.IMPORTANCE_HIGH
             )
-            val notificationManager = getSystemService(NotificationManager::class.java)
+            val notificationManager = ContextCompat.getSystemService(this,NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
         }
     }
