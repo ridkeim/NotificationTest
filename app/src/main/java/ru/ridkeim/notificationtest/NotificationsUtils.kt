@@ -8,7 +8,6 @@ import androidx.core.app.NotificationCompat
 
 private val NOTIFICATION_ID = 0
 private val REQUEST_CODE = 0
-private val REQUEST_CODE_1 = 1
 
 fun NotificationManager.sendNotification(message : String, context : Context){
 
@@ -22,16 +21,19 @@ fun NotificationManager.sendNotification(message : String, context : Context){
     )
 
     val snoozeIntent = Intent(context, NotificationActionReceiver::class.java)
+    snoozeIntent.action = NotificationActionReceiver.ACTION_SNOOZE
     val snoozePendingIntent = PendingIntent.getBroadcast(
         context,
         REQUEST_CODE,
         snoozeIntent,
         PendingIntent.FLAG_ONE_SHOT)
 
+    val dismissIntent = Intent(context, NotificationActionReceiver::class.java)
+    dismissIntent.action = NotificationActionReceiver.ACTION_DISMISS
     val dismissPendingIntent = PendingIntent.getBroadcast(
         context,
-        REQUEST_CODE_1,
-        snoozeIntent,
+        REQUEST_CODE,
+        dismissIntent,
         PendingIntent.FLAG_ONE_SHOT
     )
     val builder = NotificationCompat.Builder(
